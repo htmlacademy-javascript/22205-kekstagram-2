@@ -90,7 +90,7 @@ const onFormSubmit = (evt) => {
   const isValid = validateForm();
   if (isValid) {
     blockSubmitButton();
-    sendData(new FormData(evt.target))
+    sendData(new FormData(formElement))
       .then(() => {
         closeFormModal();
         showSuccessMessage();

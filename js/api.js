@@ -16,10 +16,10 @@ const load = (route, method = Method.GET, body = null) =>
       if (!response.ok) {
         throw new Error();
       }
-      return response.json();
+      return response;
     });
 
-const getData = () => load(Route.GET_DATA);
+const getData = () => load(Route.GET_DATA).then((response) => response.json());
 
 const sendData = (body) => load(Route.SEND_DATA, Method.POST, body);
 
