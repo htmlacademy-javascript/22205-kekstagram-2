@@ -5,6 +5,8 @@ import { resetEffects, initEffects } from './effects.js';
 import { sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './message.js';
 
+const FILE_TYPES = ['jpg', 'jpeg', 'png', 'webp'];
+
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
   SUBMITTING: 'Отправка...',
@@ -18,6 +20,8 @@ const fileFieldElement = formElement.querySelector('#upload-file');
 const hashtagsFieldElement = formElement.querySelector('.text__hashtags');
 const commentFieldElement = formElement.querySelector('.text__description');
 const submitButtonElement = formElement.querySelector('#upload-submit');
+const previewImageElement = formElement.querySelector('.img-upload__preview img');
+const effectsPreviewElements = formElement.querySelectorAll('.effects__preview');
 
 const isTextFieldFocused = () =>
   document.activeElement === hashtagsFieldElement ||
@@ -30,6 +34,10 @@ const closeFormModal = () => {
   resetValidation();
   resetScale();
   resetEffects();
+  previewImageElement.src = 'img/upload-default-image.jpg';
+  effectsPreviewElements.forEach((previewElement) => {
+    previewElement.style.backgroundImage = '';
+  });
   overlayElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
 
@@ -44,6 +52,18 @@ function onDocumentKeydown(evt) {
 }
 
 const onFileInputChange = () => {
+  const file = fileFieldElement.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((extension) => fileName.endsWith(extension));
+
+  if (matches) {
+    const previewUrl = URL.createObjectURL(file);
+    previewImageElement.src = previewUrl;
+    effectsPreviewElements.forEach((previewElement) => {
+      previewElement.style.backgroundImage = `url(${previewUrl})`;
+    });
+  }
+
   overlayElement.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
 
