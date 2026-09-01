@@ -1,13 +1,32 @@
+import { showBigPicture } from './big-picture.js';
+
 const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
 const containerElement = document.querySelector('.pictures');
 
-const createThumbnail = ({ url, description, likes, comments }) => {
+let photos = [];
+
+const onContainerClick = (evt) => {
+  const thumbnailElement = evt.target.closest('.picture');
+  if (!thumbnailElement) {
+    return;
+  }
+
+  evt.preventDefault();
+  const pictureId = Number(thumbnailElement.dataset.pictureId);
+  const photo = photos.find((item) => item.id === pictureId);
+  if (photo) {
+    showBigPicture(photo);
+  }
+};
+
+const createThumbnail = ({ id, url, description, likes, comments }) => {
   const pictureElement = pictureTemplate.cloneNode(true);
   const imageElement = pictureElement.querySelector('.picture__img');
 
+  pictureElement.dataset.pictureId = id;
   imageElement.src = url;
   imageElement.alt = description;
   pictureElement.querySelector('.picture__likes').textContent = likes;
@@ -17,6 +36,7 @@ const createThumbnail = ({ url, description, likes, comments }) => {
 };
 
 const renderThumbnails = (pictures) => {
+  photos = pictures;
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((picture) => {
@@ -26,5 +46,7 @@ const renderThumbnails = (pictures) => {
 
   containerElement.append(fragment);
 };
+
+containerElement.addEventListener('click', onContainerClick);
 
 export { renderThumbnails };
