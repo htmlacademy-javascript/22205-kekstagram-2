@@ -51,3 +51,27 @@ extractDigits('а я томат');
 extractDigits(2023);
 extractDigits(-1);
 extractDigits(1.5);
+
+
+// Функция для проверки времени встречи в рамках рабочего дня
+const MINUTES_IN_HOUR = 60;
+
+const parseTimeToMinutes = (timeString) => {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  return hours * MINUTES_IN_HOUR + minutes;
+};
+
+const isMeetingWithinWorkday = (workStart, workEnd, meetingStart, meetingDuration) => {
+  const startWorkMinutes = parseTimeToMinutes(workStart);
+  const endWorkMinutes = parseTimeToMinutes(workEnd);
+  const startMeetingMinutes = parseTimeToMinutes(meetingStart);
+  const endMeetingMinutes = startMeetingMinutes + meetingDuration;
+
+  return startMeetingMinutes >= startWorkMinutes && endMeetingMinutes <= endWorkMinutes;
+};
+
+isMeetingWithinWorkday('08:00', '17:30', '14:00', 90);
+isMeetingWithinWorkday('8:0', '10:0', '8:0', 120);
+isMeetingWithinWorkday('08:00', '14:30', '14:00', 90);
+isMeetingWithinWorkday('14:00', '17:30', '08:0', 90);
+isMeetingWithinWorkday('8:00', '17:30', '08:00', 900);
