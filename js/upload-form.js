@@ -1,5 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { validateForm, resetValidation } from './validation.js';
+import { resetScale, initScale } from './scale.js';
+import { resetEffects, initEffects } from './effects.js';
 
 const formElement = document.querySelector('.img-upload__form');
 const overlayElement = formElement.querySelector('.img-upload__overlay');
@@ -16,6 +18,8 @@ const isTextFieldFocused = () =>
 const closeFormModal = () => {
   formElement.reset();
   resetValidation();
+  resetScale();
+  resetEffects();
   overlayElement.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
 
@@ -48,6 +52,8 @@ const onFormSubmit = (evt) => {
 };
 
 const initUploadForm = () => {
+  initScale();
+  initEffects();
   fileFieldElement.addEventListener('change', onFileInputChange);
   cancelButtonElement.addEventListener('click', onCancelButtonClick);
   formElement.addEventListener('submit', onFormSubmit);
