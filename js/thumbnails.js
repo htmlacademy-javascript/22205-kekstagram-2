@@ -15,6 +15,7 @@ const onContainerClick = (evt) => {
   }
 
   evt.preventDefault();
+  thumbnailElement.blur();
   const pictureId = Number(thumbnailElement.dataset.pictureId);
   const photo = photos.find((item) => item.id === pictureId);
   if (photo) {
