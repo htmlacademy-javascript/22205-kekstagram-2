@@ -14,6 +14,8 @@ const dataErrorTemplate = document.querySelector('#data-error')
   .content
   .querySelector('.data-error');
 
+let currentMessageElement = null;
+
 const showDataError = () => {
   const dataErrorElement = dataErrorTemplate.cloneNode(true);
   document.body.append(dataErrorElement);
@@ -24,9 +26,9 @@ const showDataError = () => {
 };
 
 const hideMessage = () => {
-  const messageElement = document.querySelector('.success') || document.querySelector('.error');
-  if (messageElement) {
-    messageElement.remove();
+  if (currentMessageElement) {
+    currentMessageElement.remove();
+    currentMessageElement = null;
     document.removeEventListener('keydown', onDocumentKeydown);
     document.removeEventListener('click', onDocumentClick);
   }
@@ -47,8 +49,8 @@ function onDocumentClick(evt) {
 }
 
 const showMessage = (template, buttonClass) => {
-  const messageElement = template.cloneNode(true);
-  const closeButtonElement = messageElement.querySelector(buttonClass);
+  currentMessageElement = template.cloneNode(true);
+  const closeButtonElement = currentMessageElement.querySelector(buttonClass);
 
   closeButtonElement.addEventListener('click', () => {
     hideMessage();
@@ -57,7 +59,7 @@ const showMessage = (template, buttonClass) => {
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
 
-  document.body.append(messageElement);
+  document.body.append(currentMessageElement);
 };
 
 const showSuccessMessage = () => {
